@@ -49,5 +49,6 @@
     var ks_search_item_selected  = '';
     var ks_node_selected         = '';
   </script>
+  <script type="text/javascript" src="${pluginUrl}/js/prototype.js" />
   <script type="text/javascript" src="${pluginUrl}/js/keyboard-shortcuts.js" />
 </j:jelly>
