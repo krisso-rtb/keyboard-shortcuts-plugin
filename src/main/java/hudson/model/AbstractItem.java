@@ -77,7 +77,6 @@ import javax.annotation.Nonnull;
 
 import org.acegisecurity.AccessDeniedException;
 import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.Stapler;
@@ -97,7 +96,6 @@ import javax.xml.transform.stream.StreamSource;
 import static hudson.model.queue.Executables.getParentOf;
 import hudson.model.queue.SubTask;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 import org.apache.commons.io.FileUtils;
 import org.kohsuke.accmod.Restricted;
@@ -541,9 +539,15 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
                     View view = (View) last.getObject();
                     if (view.getOwner().getItemGroup() == getParent() && !view.isDefault()) {
                         // Showing something inside a view, so should use that as the base URL.
-                        String base = last.getUrl().substring(req.getContextPath().length() + 1) + '/';
-                        LOGGER.log(Level.FINER, "using {0}{1} for {2} from {3}", new Object[] {base, shortUrl, this, uri});
-                        return base + shortUrl;
+                        String prefix = req.getContextPath() + "/";
+                        String url = last.getUrl();
+                        if (url.startsWith(prefix)) {
+                            String base = url.substring(prefix.length()) + '/';
+                            LOGGER.log(Level.FINER, "using {0}{1} for {2} from {3} given {4}", new Object[] {base, shortUrl, this, uri, prefix});
+                            return base + shortUrl;
+                        } else {
+                            LOGGER.finer(() -> url + " does not start with " + prefix + " as expected");
+                        }
                     } else {
                         LOGGER.log(Level.FINER, "irrelevant {0} for {1} from {2}", new Object[] {view.getViewName(), this, uri});
                     }
