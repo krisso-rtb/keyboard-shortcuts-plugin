@@ -28,6 +28,7 @@ import hudson.model.Item;
 import hudson.model.TopLevelItem;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import jenkins.model.Jenkins;
@@ -45,7 +46,7 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public final class JobUtils {
     public static Collection<Item> getAllJobs() {
-        return Jenkins.getInstance().getAllItems();
+        return Objects.requireNonNull(Jenkins.getInstanceOrNull()).getAllItems();
     }
 
     public static JSONArray getAllJobsAsJsonArray() {

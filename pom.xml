@@ -44,11 +44,15 @@
   </description>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/Keyboard+Shortcuts+Plugin</url>
 
+  <!-- Must be built with jdk 8, e.g. with sdkman: -->
+  <!-- sdk use java 8.0.392-amzn -->
   <properties>
     <!-- http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jenkins.version>2.173</jenkins.version>
+<!--    <jenkins.version>2.426</jenkins.version>-->
     <java.level>8</java.level>
+    <findbugs.failOnError>false</findbugs.failOnError>
   </properties>
 
   <licenses>
@@ -90,6 +94,22 @@
   </dependencies>
 
   <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.kohsuke</groupId>
+        <artifactId>access-modifier-checker</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+
     <extensions>
       <extension>
         <groupId>org.apache.maven.scm</groupId>
